@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>children chain</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.11.5/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.production.min.js" integrity="sha512-SUJujhtUWZUlwsABaZNnTFRlvCu7XGBZBL1VF33qRvvgNk3pBS9E353kcag4JAv05/nsB9sanSXFbdHAUW9+lg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js" integrity="sha512-SYsXmAblZhruCNUVmTp5/v2a1Fnoia06iJh3+L9B9wUaqpRVjcNBQsqAglQG9b5+IaVCfLDH5+vW923JL5epZA==" crossorigin="anonymous"></script>
+
+  <script data-presets="es2017,react" type="text/babel">
+
+    // Define Componet
+    const App = () => {
+      return (
+        <div>
+          <h2>children chain</h2>
+          <Tag1>
+            <Tag2 arg="foo"/>
+          </Tag1>
+          <Tag1d InnerTag={Tag2} />
+        </div>
+      )
+    }
+
+    const Tag1 = ({children}) => {
+      return (
+        <div>
+          <h1>Tag1</h1>
+          {children}
+        </div>
+      )
+    }
+
+    const Tag1d = ({InnerTag}) => {
+      return (
+        <div>
+          <h1>Tag1d</h1>
+          <InnerTag arg={"bar"}/>
+        </div>
+      )
+    }
+
+
+    const Tag2 = ({arg}) => {
+      return (
+        <div>
+          <h2>Tag2</h2>
+          <p>****</p>
+          <p>{arg}</p>
+          <p>****</p>
+        </div>
+      )
+    }
+
+
+    // Execute Render
+    ReactDOM.render(
+      <App />,
+      document.getElementById("app")
+    );
+
+    // timerをPromiseで実装しておく fetchがクロススクリプティングでできないため代替
+    // 使い方: sleep(3,()=>"abc").then(x=>console.log(x))
+    const sleep = (ms,func) => new Promise((resolve, reject) => setTimeout(()=>resolve(func()), ms*1000));
+
+
+
+  </script>
+</body>
+
+</html>

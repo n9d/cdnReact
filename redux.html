@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>React Redux cdn版</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.11.5/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.production.min.js" integrity="sha512-SUJujhtUWZUlwsABaZNnTFRlvCu7XGBZBL1VF33qRvvgNk3pBS9E353kcag4JAv05/nsB9sanSXFbdHAUW9+lg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.production.min.js" integrity="sha512-SYsXmAblZhruCNUVmTp5/v2a1Fnoia06iJh3+L9B9wUaqpRVjcNBQsqAglQG9b5+IaVCfLDH5+vW923JL5epZA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.min.js" integrity="sha512-P36ourTueX/PrXrD4Auc1kVLoTE7bkWrIrkaM0IG2X3Fd90LFgTRogpZzNBssay0XOXhrIgudf4wFeftdsPDiQ==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-redux/7.2.1/react-redux.min.js" integrity="sha512-Ae6lzX7eAwqencnyfCtoAf2h3tQhsV5DrHiqExqyjKrxvTgPHwwOlM694naWdO2ChMmBk3by5oM2c3soVPbI5g==" crossorigin="anonymous"></script>
+
+  <script data-presets="es2017,react" type="text/babel">
+
+    const { combineReducers, createStore } = Redux;
+    const { connect, Provider } = ReactRedux;
+
+    // 最小構成 Redux
+    function counter(state = 0, action) {
+      switch (action.type) {
+        case 'INC':
+          return state + 1
+        case 'DEC':
+          return state - 1
+        default:
+          return state
+      }
+    }
+
+    // const allReducer = Redux.combineReducers({ counter: counter });
+    const allReducer = combineReducers({ counter: counter });
+    let store = createStore(allReducer)
+
+    const putStore = () => console.log({ STORE: "store's value", ...store.getState() })
+    store.subscribe(putStore) // storeが変わったときにconsoleに出力
+    // Redux ここまで
+
+    putStore() // 初期storeをconsoleに出力
+    const dispachTest = () => { // storeを簡単に変えるためのテスト
+      store.dispatch({ type: 'INC' })
+      store.dispatch({ type: 'INC' })
+      store.dispatch({ type: 'DEC' })
+    }
+
+    // React ここから
+    const Tag1 = (props) => {
+      return (
+        <div><h1>Tag1</h1><Tag2 /></div>
+      )
+    }
+
+    const Tag2 = (props) => {
+      return (
+        <div><h2>Tag2</h2><Tag3 a="1" /></div>
+      )
+    }
+
+    const Tag3Base = (props) => {
+      return (
+        <div>
+          <h3>Tag3</h3>
+          a={props.a},
+          store.counter={props.c}
+          <br />
+          <button onClick={() => props.dispatch({ type: 'DEC' })}>-1</button>
+          <button onClick={() => props.dispatch({ type: 'INC' })}>+1</button>
+          <Tag4 />
+        </div>
+      )
+    }
+
+    const Tag4 = (props) => {
+      return (
+        <div><h4>Tag4</h4></div>
+      )
+    }
+
+    // ReactRedux.connectは React.Componentをラップしたコンポーネントを返す（ここでstate変化時にrenderしている模様）
+    const Tag3 = (connect(s => { return { c: s.counter } }))(Tag3Base)
+
+    ReactDOM.render(
+      <Provider store={store}>
+        <Tag1 />
+      </Provider>,
+      document.getElementById("app"))
+    // React ここまで
+
+  </script>
+</body>
+</html>

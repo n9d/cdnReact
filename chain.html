@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>children chain</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.11.5/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.development.js" integrity="sha512-WeVzLHA0cvzmpw0uE6ykQt9P+YFpFSTg7byYj5SgA3C47rEmyej7AZTr79Ik14kFxgII+6cHgfpVeRqQj/1Nlw==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.development.min.js" integrity="sha512-+mKQgQfnC2IiMjSUWvAjWKe99A2fWiQzhe9LRzrhoUyE0wPn2mrdyUgsepIw4dtMzjEARCrZutpBx/N70ujRJA==" crossorigin="anonymous"></script>
+
+
+  <script data-presets="es2017,react" type="text/babel">
+
+    // timerをPromiseで実装しておく fetchがクロススクリプティングでできないため代替
+    // 使い方: sleep(3,()=>"abc").then(x=>console.log(x))
+    const sleep = (ms,func) => new Promise((resolve, reject) => setTimeout(()=>resolve(func()), ms*1000));
+
+    // Define Componet
+    const App = () => {
+      return (
+        <div>
+          <h1>chain</h1>
+					<Tag1/>
+        </div>
+      )
+    }
+
+    const Tag1 = () => {
+        return (
+        <div>
+          <h2>hello tag1</h2>
+          <Tag2 Chain={[Tag3,Tag4,Tag5]} arg={{}} />
+        </div>
+      )
+    }
+
+    const Tag2 = ({Chain,arg}) => {
+			const [state,setState] = React.useState (arg)
+			if (state.a===undefined) {
+				sleep(2,()=>"aaa").then(x=>setState({...state,a:"aaa"}))
+				return (<br/>) //型の問題を片付ける必要あり
+			} else {
+				if (Chain.length == 0) {
+					return (<br/>)
+				} else {
+					NextTag = Chain[0]
+					return (
+						<div>
+							<h3> Tag2 </h3>
+							a: {state.a ? state.a : ""}
+							<NextTag Chain={Chain.slice(1)} arg={state} />
+						</div>
+					)
+				}
+			}
+    }
+    const Tag3 = ({Chain,arg}) => {
+			const [state,setState] = React.useState (arg)
+			if (state.a!==undefined && state.b===undefined) {
+				sleep(1,()=>"ccc").then(x=>setState({...state,b:"ccc"}))
+				return (<br/>)
+			} else {
+				if (Chain.length == 0) {
+					return (<br/>)
+				} else {
+					NextTag = Chain[0]
+					return (
+						<div>
+							<h3> Tag3 </h3>
+							b: {state.b ? state.b : ""}
+							<NextTag Chain={Chain.slice(1)} arg={state} />
+						</div>
+					)
+				}
+			}
+    }
+    const Tag4 = ({Chain,arg}) => {
+			const [state,setState] = React.useState (arg)
+			if (state.a!==undefined && state.c===undefined) {
+				sleep(1,()=>"ccc").then(x=>setState({...state,c:"ccc"}))
+				return (<br/>)
+			} else {
+				if (Chain.length == 0) {
+					return (<br/>)
+				} else {
+					NextTag = Chain[0]
+					return (
+						<div>
+							<h3> Tag4 </h3>
+							c: {state.c ? state.c : ""}
+							<NextTag Chain={Chain.slice(1)} arg={state} />
+						</div>
+					)
+				}
+			}
+    }
+
+		const Tag5 = ({arg}) => {
+      return (
+        <div>
+          <h3> Tag5 </h3>
+          <p>****</p>
+          <p>a:{arg.a}</p>
+          <p>b:{arg.b}</p>
+          <p>c:{arg.c}</p>
+          <p>****</p>
+        </div>
+      )
+    }
+
+
+
+    const ChildrenChain = () => {
+        return (
+        <div>
+          <h2>children chain</h2>
+          <ChainTag Chain={[ChainTag,ChainTag,EndTag]} arg={{count:0,value:"foo"}} />
+        </div>
+      )
+    }
+
+    const ChainTag = ({Chain,arg}) => {
+      if (Chain.length == 0) {
+        return (<br/>)
+      } else {
+        NextTag = Chain[0]
+        arg.count+=1
+        return (
+          <div>
+            <h3>ChainTag {arg.count}</h3>
+            hello chaintag
+            <NextTag Chain={Chain.slice(1)} arg={arg} />
+          </div>
+        )
+      }
+    }
+
+    const EndTag = ({arg}) => {
+      return (
+        <div>
+          <h3>EndTag</h3>
+          <p>****</p>
+          <p>{arg.count}</p>
+          <p>{arg.value}</p>
+          <p>****</p>
+        </div>
+      )
+    }
+
+
+    // Execute Render
+    ReactDOM.render(
+      <App />,
+      document.getElementById("app")
+    );
+
+
+
+
+  </script>
+</body>
+
+</html>
