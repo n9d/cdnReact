@@ -27,79 +27,79 @@
       return (
         <div>
           <h1>state</h1>
-					<Tag1/>
+          <Tag1/>
         </div>
       )
     }
 
     const Tag1 = (props) => {
-			const initState = {
-				a:undefined,
-				b:undefined,
-				c:undefined
-			}
-			const [state,setState] = React.useState (initState)
-			console.log(state)
-			return (
-				<div>
-					<h2> hello tag1 </h2>
-					<Tag2 state={state} setState={setState} checkpoint={[]} />
-					<Tag3 state={state} setState={setState} checkpoint={["a"]}/>
-					<Tag4 state={state} setState={setState} checkpoint={["a","b"]}/>
-					<Tag5 state={state} setState={setState} checkpoint={["a","b","c"]}/>
-				</div>
-			)
+      const initState = {
+        a:undefined,
+        b:undefined,
+        c:undefined
+      }
+      const [state,setState] = React.useState (initState)
+      console.log(state)
+      return (
+        <div>
+          <h2> hello tag1 </h2>
+          <Tag2 state={state} setState={setState} checkpoint={[]} />
+          <Tag3 state={state} setState={setState} checkpoint={["a"]}/>
+          <Tag4 state={state} setState={setState} checkpoint={["a","b"]}/>
+          <Tag5 state={state} setState={setState} checkpoint={["a","b","c"]}/>
+        </div>
+      )
     }
 
-		const Tag2 = ({state,setState,checkpoint}) => {
-			if (checkpoint.every(x=>state[x]!==undefined) && state.a===undefined) {
-				sleep(2,()=>"aaa").then(x=>setState({...state,a:x}))
-			}
-			return (
-				<div>
-					<h3> tag2 </h3>
-					a: {state.a ? state.a : ""}
-				</div>
-			)
-		}
+    const Tag2 = ({state,setState,checkpoint}) => {
+      if (checkpoint.every(x=>state[x]!==undefined) && state.a===undefined) {
+        sleep(2,()=>"aaa").then(x=>setState({...state,a:x}))
+      }
+      return (
+        <div>
+          <h3> tag2 </h3>
+          a: {state.a ? state.a : ""}
+        </div>
+      )
+    }
 
-		const Tag3 = ({state,setState,checkpoint}) => {
-			if (checkpoint.every(x=>state[x]!==undefined) && state.b===undefined) {
-				sleep(1,()=>"bbb").then(x=>setState({...state,b:x}))
-			}
-			return (
-				<div>
-					<h3> tag3 </h3>
-					b: {state.b ? state.b : ""}
-				</div>
-			)
-		}
+    const Tag3 = ({state,setState,checkpoint}) => {
+      if (checkpoint.every(x=>state[x]!==undefined) && state.b===undefined) {
+        sleep(1,()=>"bbb").then(x=>setState({...state,b:x}))
+      }
+      return (
+        <div>
+          <h3> tag3 </h3>
+          b: {state.b ? state.b : ""}
+        </div>
+      )
+    }
 
-		const Tag4 = ({state,setState,checkpoint}) => {
-			if (checkpoint.every(x=>state[x]!==undefined) && state.c===undefined) {
-				sleep(1,()=>"ccc").then(x=>setState({...state,c:x}))
-			}
-			return (
-				<div>
-					<h3> tag4 </h3>
-					c: {state.c ? state.c : ""}
-				</div>
-			)
-		}
+    const Tag4 = ({state,setState,checkpoint}) => {
+      if (checkpoint.every(x=>state[x]!==undefined) && state.c===undefined) {
+        sleep(1,()=>"ccc").then(x=>setState({...state,c:x}))
+      }
+      return (
+        <div>
+          <h3> tag4 </h3>
+          c: {state.c ? state.c : ""}
+        </div>
+      )
+    }
 
-		const Tag5 = ({state,setState,checkpoint}) => {
-			if (!checkpoint.every(x=>state[x]!==undefined)) {
-				return (<br/>)
-			}
-			return (
-				<div>
-					<h3> hello tag5 </h3>
-					a: {state.a ? state.a : ""}
-					b: {state.b ? state.b : ""}
-					c: {state.c ? state.c : ""}
-				</div>
-			)
-		}
+    const Tag5 = ({state,setState,checkpoint}) => {
+      if (!checkpoint.every(x=>state[x]!==undefined)) {
+        return (<br/>)
+      }
+      return (
+        <div>
+          <h3> hello tag5 </h3>
+          a: {state.a ? state.a : ""}
+          b: {state.b ? state.b : ""}
+          c: {state.c ? state.c : ""}
+        </div>
+      )
+    }
 
 
     // Execute Render

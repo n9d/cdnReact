@@ -26,7 +26,7 @@
       return (
         <div>
           <h1>chain</h1>
-					<Tag1/>
+          <Tag1/>
         </div>
       )
     }
@@ -41,67 +41,67 @@
     }
 
     const Tag2 = ({Chain,arg}) => {
-			const [state,setState] = React.useState (arg)
-			if (state.a===undefined) {
-				sleep(2,()=>"aaa").then(x=>setState({...state,a:"aaa"}))
-				return (<br/>) //型の問題を片付ける必要あり
-			} else {
-				if (Chain.length == 0) {
-					return (<br/>)
-				} else {
-					NextTag = Chain[0]
-					return (
-						<div>
-							<h3> Tag2 </h3>
-							a: {state.a ? state.a : ""}
-							<NextTag Chain={Chain.slice(1)} arg={state} />
-						</div>
-					)
-				}
-			}
+      const [state,setState] = React.useState (arg)
+      if (state.a===undefined) {
+        sleep(2,()=>"aaa").then(x=>setState({...state,a:"aaa"}))
+        return (<br/>) //型の問題を片付ける必要あり
+      } else {
+        if (Chain.length == 0) {
+          return (<br/>)
+        } else {
+          NextTag = Chain[0]
+          return (
+            <div>
+              <h3> Tag2 </h3>
+              a: {state.a ? state.a : ""}
+              <NextTag Chain={Chain.slice(1)} arg={state} />
+            </div>
+          )
+        }
+      }
     }
     const Tag3 = ({Chain,arg}) => {
-			const [state,setState] = React.useState (arg)
-			if (state.a!==undefined && state.b===undefined) {
-				sleep(1,()=>"ccc").then(x=>setState({...state,b:"ccc"}))
-				return (<br/>)
-			} else {
-				if (Chain.length == 0) {
-					return (<br/>)
-				} else {
-					NextTag = Chain[0]
-					return (
-						<div>
-							<h3> Tag3 </h3>
-							b: {state.b ? state.b : ""}
-							<NextTag Chain={Chain.slice(1)} arg={state} />
-						</div>
-					)
-				}
-			}
+      const [state,setState] = React.useState (arg)
+      if (state.a!==undefined && state.b===undefined) {
+        sleep(1,()=>"ccc").then(x=>setState({...state,b:"ccc"}))
+        return (<br/>)
+      } else {
+        if (Chain.length == 0) {
+          return (<br/>)
+        } else {
+          NextTag = Chain[0]
+          return (
+            <div>
+              <h3> Tag3 </h3>
+              b: {state.b ? state.b : ""}
+              <NextTag Chain={Chain.slice(1)} arg={state} />
+            </div>
+          )
+        }
+      }
     }
     const Tag4 = ({Chain,arg}) => {
-			const [state,setState] = React.useState (arg)
-			if (state.a!==undefined && state.c===undefined) {
-				sleep(1,()=>"ccc").then(x=>setState({...state,c:"ccc"}))
-				return (<br/>)
-			} else {
-				if (Chain.length == 0) {
-					return (<br/>)
-				} else {
-					NextTag = Chain[0]
-					return (
-						<div>
-							<h3> Tag4 </h3>
-							c: {state.c ? state.c : ""}
-							<NextTag Chain={Chain.slice(1)} arg={state} />
-						</div>
-					)
-				}
-			}
+      const [state,setState] = React.useState (arg)
+      if (state.a!==undefined && state.c===undefined) {
+        sleep(1,()=>"ccc").then(x=>setState({...state,c:"ccc"}))
+        return (<br/>)
+      } else {
+        if (Chain.length == 0) {
+          return (<br/>)
+        } else {
+          NextTag = Chain[0]
+          return (
+            <div>
+              <h3> Tag4 </h3>
+              c: {state.c ? state.c : ""}
+              <NextTag Chain={Chain.slice(1)} arg={state} />
+            </div>
+          )
+        }
+      }
     }
 
-		const Tag5 = ({arg}) => {
+    const Tag5 = ({arg}) => {
       return (
         <div>
           <h3> Tag5 </h3>
