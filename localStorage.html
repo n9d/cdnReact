@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>local storage</title>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" integrity="sha512-kp7YHLxuJDJcOzStgd6vtpxr4ZU9kjn77e6dBsivSz+pUuAuMlE2UTdKB7jjsWT84qbS8kdCWHPETnP/ctrFsA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.11.5/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.13.1/umd/react.development.js" integrity="sha512-WeVzLHA0cvzmpw0uE6ykQt9P+YFpFSTg7byYj5SgA3C47rEmyej7AZTr79Ik14kFxgII+6cHgfpVeRqQj/1Nlw==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.13.1/umd/react-dom.development.min.js" integrity="sha512-+mKQgQfnC2IiMjSUWvAjWKe99A2fWiQzhe9LRzrhoUyE0wPn2mrdyUgsepIw4dtMzjEARCrZutpBx/N70ujRJA==" crossorigin="anonymous"></script>
+
+  <script data-presets="es2017,react" type="text/babel">
+
+    // Define Component
+    const App = () => {
+      const handleSet = () => {
+        localStorage.setItem("login","true")
+      }
+      const handleGet = () => {
+        loginStatus = localStorage.getItem("login")
+        console.log(loginStatus)
+      }
+      const handleDelete = () => {
+        localStorage.setItem("login","false")
+      }
+      return (
+        <div>
+          <h2>local storage</h2>
+          <p>hello world</p>
+          <button onClick={() => handleSet()}> set </button>
+          <button onClick={() => handleGet()}> get </button>
+          <button onClick={() => handleDelete()}> delete </button>
+        </div>
+      )
+    }
+
+    // Execute Render
+    ReactDOM.render(
+      <App />,
+      document.getElementById("app")
+    );
+
+  </script>
+</body>
+
+</html>

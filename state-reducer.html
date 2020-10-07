@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
 
-  <title>state</title>
+  <title>Reducer</title>
 </head>
 
 <body>
@@ -17,6 +17,8 @@
 
   <script data-presets="es2017,react" type="text/babel">
 
+    const { useEffect, useReducer } = React
+
     // timerをPromiseで実装しておく fetchがクロススクリプティングでできないため代替
     // 使い方: sleep(3,()=>"abc").then(x=>console.log(x))
     const sleep = (ms,func) => new Promise((resolve, reject) => setTimeout(()=>resolve(func()), ms*1000));
@@ -26,35 +28,50 @@
     const App = () => {
       return (
         <div>
-          <h1>state</h1>
+          <h1>Reducer</h1>
           <Tag1/>
         </div>
       )
     }
 
+    const reducer = (state, action) => {
+      switch (action.type) {
+        case "call":
+          action.func()
+          return {...state, called:state.called.concat([action.name])}
+        case "set":
+          return {...state, ...action.payload}
+        default:
+          throw new Error()
+      }
+    }
+
     const Tag1 = (props) => {
       const initState = {
-        a:undefined,
-        b:undefined,
-        c:undefined
+        called:[]
       }
-      const [state,setState] = React.useState (initState)
+      const [state, dispatch] = useReducer(reducer, initState)
       console.log(state)
       return (
         <div>
           <h2> hello tag1 </h2>
-          <Tag2 state={state} setState={setState} checkpoint={[]} />
-          <Tag3 state={state} setState={setState} checkpoint={["a"]}/>
-          <Tag4 state={state} setState={setState} checkpoint={["a","b"]}/>
-          <Tag5 state={state} setState={setState} checkpoint={["a","b","c"]}/>
+          <Tag2 state={state} dispatch={dispatch} />
+          <Tag3 state={state} dispatch={dispatch} />
+          <Tag4 state={state} dispatch={dispatch} />
+          <Tag5 state={state} />
         </div>
       )
     }
 
-    const Tag2 = ({state,setState,checkpoint}) => {
-      if (checkpoint.every(x=>state[x]!==undefined) && state.a===undefined) {
-        sleep(2,()=>"aaa").then(x=>setState({...state,a:x}))
-      }
+    const Tag2 = ({state,dispatch}) => {
+      useEffect(()=>{
+        if (state.called.indexOf("a") < 0) {
+          dispatch({type:"call", name:"a", func: ()=>{
+            sleep(2,()=>"aaa")
+              .then(x=>dispatch({type:"set", name:"a", payload:{a:x}}))
+          }})
+        }
+      })
       return (
         <div>
           <h3> tag2 </h3>
@@ -63,10 +80,15 @@
       )
     }
 
-    const Tag3 = ({state,setState,checkpoint}) => {
-      if (checkpoint.every(x=>state[x]!==undefined) && state.b===undefined) {
-        sleep(1,()=>"bbb").then(x=>setState({...state,b:x}))
-      }
+    const Tag3 = ({state, dispatch}) => {
+      useEffect(()=>{
+        if (state.called.indexOf("b") < 0) {
+          dispatch({type:"call", name:"b", func: ()=>{
+            sleep(3,()=>"bbb")
+              .then(x=>dispatch({type:"set", name:"b", payload:{b:x}}))
+          }})
+        }
+      })
       return (
         <div>
           <h3> tag3 </h3>
@@ -75,10 +97,15 @@
       )
     }
 
-    const Tag4 = ({state,setState,checkpoint}) => {
-      if (checkpoint.every(x=>state[x]!==undefined) && state.c===undefined) {
-        sleep(1,()=>"ccc").then(x=>setState({...state,c:x}))
-      }
+    const Tag4 = ({state, dispatch}) => {
+      useEffect(()=>{
+        if (state.called.indexOf("c") < 0) {
+          dispatch({type:"call", name:"c", func: ()=>{
+            sleep(1,()=>"ccc")
+              .then(x=>dispatch({type:"set", name:"c", payload:{c:x}}))
+          }})
+        }
+      })
       return (
         <div>
           <h3> tag4 </h3>
@@ -87,16 +114,16 @@
       )
     }
 
-    const Tag5 = ({state,setState,checkpoint}) => {
-      if (!checkpoint.every(x=>state[x]!==undefined)) {
-        return (<br/>)
+    const Tag5 = ({state}) => {
+      if (!["a","b","c"].every(x=>state[x]!==undefined)) {
+        return (<h3> hello tag5 </h3>)
       }
       return (
         <div>
           <h3> hello tag5 </h3>
-          a: {state.a ? state.a : ""}
-          b: {state.b ? state.b : ""}
-          c: {state.c ? state.c : ""}
+          <p>a: {state.a ? state.a : ""}</p>
+          <p>b: {state.b ? state.b : ""}</p>
+          <p>c: {state.c ? state.c : ""}</p>
         </div>
       )
     }
