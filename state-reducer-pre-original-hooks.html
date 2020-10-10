@@ -47,6 +47,15 @@
         }
       }
 
+      const dispatch_fetch = (name,func) => {
+        dispatch({type:"call", name:name})
+        func().then(x=>{
+          let payload={} // なんかpayloadめんどい
+          payload[name]=x
+          dispatch({type:"set", name:name, payload:payload})
+        })
+      }
+
       const initState = {
         called:[]
       }
@@ -55,9 +64,9 @@
       return (
         <div>
           <h2> hello tag1 </h2>
-          <Tag2 state={state} dispatch={dispatch} />
-          <Tag3 state={state} dispatch={dispatch} />
-          <Tag4 state={state} dispatch={dispatch} />
+          <Tag2 state={state} dispatch={dispatch_fetch} />
+          <Tag3 state={state} dispatch={dispatch_fetch} />
+          <Tag4 state={state} dispatch={dispatch_fetch} />
           <Tag5 state={state} />
         </div>
       )
@@ -66,9 +75,7 @@
     const Tag2 = ({state,dispatch}) => {
       useEffect(()=>{
         if (state.called.indexOf("a") < 0) {
-          dispatch({type:"call", name:"a"})
-          sleep(2,()=>"aaa")
-            .then((val)=>dispatch({type:"set",name:"a",payload:{a:val}}))
+          dispatch("a", ()=>sleep(2,()=>"aaa"))
         }
       })
       return (
@@ -82,9 +89,7 @@
     const Tag3 = ({state, dispatch}) => {
       useEffect(()=>{
         if (state.called.indexOf("b") < 0) {
-          dispatch({type:"call", name:"b"})
-          sleep(3,()=>"bbb")
-            .then((val)=>dispatch({type:"set",name:"b",payload:{b:val}}))
+          dispatch("b", ()=>sleep(3,()=>"bbb"))
         }
       })
       return (
@@ -98,9 +103,7 @@
     const Tag4 = ({state, dispatch}) => {
       useEffect(()=>{
         if (state.called.indexOf("c") < 0) {
-          dispatch({type:"call", name:"c"})
-          sleep(1,()=>"ccc")
-            .then((val)=>dispatch({type:"set",name:"c",payload:{c:val}}))
+          dispatch("c", ()=>sleep(1,()=>"ccc"))
         }
       })
       return (
